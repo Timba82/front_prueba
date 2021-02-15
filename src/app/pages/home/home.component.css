@@ -1,0 +1,7 @@
+.images-viewport {
+    min-height: 462px;
+    width: 100%;
+}
+.images-viewport img {
+    max-width: 100px;
+}

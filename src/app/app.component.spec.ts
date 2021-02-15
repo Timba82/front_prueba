@@ -1,31 +1,22 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { FilterPipe } from './helpers/pipes/filter.pipe';
+import { HomeComponent } from './pages/home/home.component';
 
 describe('AppComponent', () => {
+  let httpClient: HttpClient;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent, HomeComponent, FilterPipe],
+      imports: [HttpClientModule],
     }).compileComponents();
+    httpClient = TestBed.inject(HttpClient);
   });
 
-  it('should create the app', () => {
+  it('Create AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'test-app'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('test-app');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('test-app app is running!');
   });
 });

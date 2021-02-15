@@ -1,0 +1,43 @@
+<h1 class="text-center m-4">Prueba Front</h1>
+<p class="lead text-center p-2">
+  Mostrar los 4000 elementos en pantalla y añadir un filtro que permita buscar
+  por el ID de la imagen y por el texto. El scroll debe de tener un rendimiento
+  óptimo.
+</p>
+<!-- Filter Input -->
+<div class="form-row mb-4">
+  <div class="input-group mb-2 col-md-6 offset-md-3">
+    <div class="input-group-prepend">
+      <div class="input-group-text"><i class="bi bi-funnel"></i></div>
+    </div>
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Filtrar Im&aacute;genes por id o texto"
+      [formControl]="filterInput"/>
+  </div>
+</div>
+
+<cdk-virtual-scroll-viewport [itemSize]="virtualScrollItemSize" class="images-viewport">
+  <ng-container *ngIf="(images | filter: filterInput.value:'text':'id') as result">
+  <div *cdkVirtualFor="let image of images | filter: filterInput.value:'text':'id'">
+    <a
+        [href]="image.photo"
+        class="list-group-item list-group-item-action"
+        target="_blank">
+        <div class="d-flex w-100 justify-content-between">
+          <img [src]="image.photo" [alt]="'Lorem Ipsum Image ' + image.id">
+        </div>
+        <p class="mb-1">{{ image.text }}</p>
+    </a>
+  </div>
+  <!-- Not Found Message -->
+  <div class="row" *ngIf="filterInput.dirty && result.length === 0">
+    <div class="col-md-6 offset-md-3">
+      <div class="alert alert-danger">
+        {{ notFoundMessage }}
+      </div>
+    </div>
+  </div>
+</ng-container>
+</cdk-virtual-scroll-viewport>
