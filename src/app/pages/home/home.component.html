@@ -14,12 +14,12 @@
       type="text"
       class="form-control"
       placeholder="Filtrar Im&aacute;genes por id o texto"
-      [formControl]="filterInput"/>
+      [formControl]="filterInput"
+      (ngModelChange)="filterInputChange()"/>
   </div>
 </div>
 
 <cdk-virtual-scroll-viewport [itemSize]="virtualScrollItemSize" class="images-viewport">
-  <ng-container *ngIf="(images | filter: filterInput.value:'text':'id') as result">
   <div *cdkVirtualFor="let image of images | filter: filterInput.value:'text':'id'">
     <a
         [href]="image.photo"
@@ -32,12 +32,11 @@
     </a>
   </div>
   <!-- Not Found Message -->
-  <div class="row" *ngIf="filterInput.dirty && result.length === 0">
+  <div class="row" *ngIf="filterInput.dirty && showNotFoundMessage">
     <div class="col-md-6 offset-md-3">
       <div class="alert alert-danger">
         {{ notFoundMessage }}
       </div>
     </div>
   </div>
-</ng-container>
 </cdk-virtual-scroll-viewport>

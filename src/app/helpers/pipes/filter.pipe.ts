@@ -6,18 +6,18 @@ import { Images } from 'src/app/interfaces/images/images.model';
   pure: false
 })
 export class FilterPipe implements PipeTransform {
-  transform(value: Images[], filteringString: any, ...arg: any): any {
-    if (value.length === 0 || filteringString === '') {
+  transform(value: Images[], filteringString: string, ...arg: string[]): Images[] {
+    if (value.length === 0 || !filteringString) {
       return value;
     }
     const resultArray = [];
-    for (const item of value) {
-      for (const spreadArgument of arg) {
-        if (item[spreadArgument].toString().includes(filteringString)) {
-          resultArray.push(item);
-        }
-      }
+    for (const spreadArgument of arg) {
+      resultArray.push(
+        value.filter((item) =>
+          item[spreadArgument].toString().includes(filteringString)
+        )
+      );
     }
-    return resultArray;
+    return [].concat(...resultArray);
   }
 }

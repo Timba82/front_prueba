@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { FilterPipe } from 'src/app/helpers/pipes/filter.pipe';
 import { Images } from 'src/app/interfaces/images/images.model';
 import { ImagesDataService } from 'src/app/services/images/images-data.service';
 
@@ -13,8 +14,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   public images: Images[] = [];
   public notFoundMessage = 'No hay imagenes que coincidan con el filtro introducido';
   public virtualScrollItemSize = 20;
+  public showNotFoundMessage = false;
+  public filterInput = new FormControl();
   private getImagesServiceSub: Subscription;
-  filterInput = new FormControl();
+  private filter = new FilterPipe();
 
   constructor(private imagesService: ImagesDataService) {}
 
@@ -26,13 +29,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getImagesServiceSub.unsubscribe();
   }
 
-  fetchImages(): void {
+  private fetchImages(): void {
     this.getImagesServiceSub = this.imagesService.getImagesService().subscribe(
-      (data) => {
-        this.images = data;
+      (res) => {
+        this.images = res;
       },
       (err) => console.log('HTTP Error', err),
       () => console.log('HTTP request completed')
     );
+  }
+
+  filterInputChange(): void {
+    const result: Images[] = this.filter.transform(this.images, this.filterInput.value, 'text', 'id');
+    this.showNotFoundMessage = (result.length === 0);
   }
 }
